@@ -18,3 +18,13 @@ Movie shot Lab - private animation cinematography quick reference
 注意
 - 個人用の早見ツールとして利用してください。
 - 作例GIFの表示にはインターネット接続が必要です。
+
+
+=== v2.1 修正 ===
+・GitHub Pagesでマニュアル画像が出ない場合に複数パスを自動チェック
+・画像が存在しない場合は、必要なファイル名を画面に表示
+・はてなFotolifeのGIF参照に referrerpolicy=no-referrer を追加
+・GIFが外部表示制限で失敗した場合は元記事ボタンを表示
+
+GitHubへは、このZIPを解凍した中身をそのままリポジトリ直下へ配置してください。
+index.html と pages フォルダは同じ階層に置きます。

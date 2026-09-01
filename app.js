@@ -76,7 +76,24 @@ const tocView=$('tocView'), pageView=$('pageView'), tocList=$('tocList'), chips=
 const pageImage=$('pageImage'), itemTitle=$('itemTitle'), categoryLabel=$('categoryLabel'), pageCounter=$('pageCounter');
 
 function allItems(){ return groups.flatMap(g=>g.items.map(([title,page])=>({title,page,category:g.category}))); }
-function imgPath(p){return `pages/page-${String(p).padStart(2,'0')}.jpg`;}
+function pageFileName(p){return `page-${String(p).padStart(2,'0')}.jpg`;}
+function pageCandidates(p){const f=pageFileName(p); return [`./pages/${f}`, `pages/${f}`, `./satsuma_quickref/pages/${f}`, `./Movie_shot_Lab/pages/${f}`];}
+function loadPageImage(p){
+  const candidates=pageCandidates(p); let i=0;
+  pageImage.onerror=()=>{
+    i++;
+    if(i<candidates.length){ pageImage.src=candidates[i]; return; }
+    pageImage.onerror=null;
+    pageImage.removeAttribute('src');
+    pageImage.alt=`P.${p} の画像が見つかりません。GitHub に pages/${pageFileName(p)} があるか確認してください。`;
+    const wrap=document.getElementById('paperWrap');
+    wrap.classList.add('pageLoadError');
+    wrap.setAttribute('data-error', `画像ファイルが見つかりません：pages/${pageFileName(p)}`);
+  };
+  document.getElementById('paperWrap').classList.remove('pageLoadError');
+  document.getElementById('paperWrap').removeAttribute('data-error');
+  pageImage.src=candidates[0];
+}
 function itemKey(item){return `${item.category}|${item.title}|${item.page}`;}
 function getExamplesForTitle(title=''){ return examples.filter(ex => ex.keys.some(k => title.includes(k))); }
 function esc(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
@@ -131,9 +148,9 @@ function renderFavorites(){
 }
 
 function exampleCardHTML(ex){
-  return `<article class="exampleCard"><div class="exampleMedia"><img loading="lazy" src="${ex.gif}" alt="${esc(ex.term)} 作例GIF"><span class="onlineTag">ONLINE GIF</span></div><div class="exampleBody"><h3>${esc(ex.term)}</h3><p>${esc(ex.note)}</p><div class="exampleMeta">${esc(ex.work)}</div><a class="sourceBtn" href="${SOURCE_URL}" target="_blank" rel="noopener">出典記事を開く ↗</a></div></article>`;
+  return `<article class="exampleCard"><div class="exampleMedia"><img loading="lazy" referrerpolicy="no-referrer" src="${ex.gif}" alt="${esc(ex.term)} 作例GIF"><span class="onlineTag">ONLINE GIF</span></div><div class="exampleBody"><h3>${esc(ex.term)}</h3><p>${esc(ex.note)}</p><div class="exampleMeta">${esc(ex.work)}</div><a class="sourceBtn" href="${SOURCE_URL}" target="_blank" rel="noopener">出典記事を開く ↗</a></div></article>`;
 }
-function wireGifErrors(){document.querySelectorAll('.exampleMedia img').forEach(img=>img.onerror=()=>{img.parentElement.innerHTML='<div class="gifUnavailable">GIFを読み込めませんでした。<br>ネット接続を確認してください。</div>';});}
+function wireGifErrors(){document.querySelectorAll('.exampleMedia img').forEach(img=>{img.onerror=()=>{const card=img.closest('.exampleCard'); const src=img.getAttribute('src'); img.parentElement.innerHTML=`<div class="gifUnavailable">作例GIFを直接読み込めませんでした。<br><small>はてな側の外部表示制限の可能性があります。</small><br><a class="sourceBtn" href="${SOURCE_URL}" target="_blank" rel="noopener noreferrer">元記事で作例を見る ↗</a></div>`; console.warn('GIF load failed',src);};});}
 
 function renderHomeContent(){
   renderRecent();
@@ -150,7 +167,7 @@ function setMode(mode){
 
 function openPage(p,title='',cat=''){
   currentPage=Math.max(1,Math.min(47,p)); currentItem={title:title||`P.${currentPage}`,category:cat||'本文',page:currentPage};
-  pageImage.src=imgPath(currentPage); itemTitle.textContent=currentItem.title; categoryLabel.textContent=currentItem.category; pageCounter.textContent=`P.${currentPage} / 47`;
+  loadPageImage(currentPage); itemTitle.textContent=currentItem.title; categoryLabel.textContent=currentItem.category; pageCounter.textContent=`P.${currentPage} / 47`;
   $('prevBtn').disabled=currentPage<=1; $('nextBtn').disabled=currentPage>=47;
   const rel=getExamplesForTitle(currentItem.title); $('exampleCount').textContent=rel.length?`(${rel.length})`:''; $('exampleTab').disabled=!rel.length;
   renderRelatedExamples(rel); updateFavoriteButton(); setDetail('manual');
