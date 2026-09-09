@@ -1,11 +1,9 @@
-Movie shot Lab v2.3 Branding Edition
+Movie shot Lab v2.4 Camera Movement
 
-・新しい映画カメラのアプリアイコンをUIに統合
-・ブラウザ用favicon / iPhone用apple-touch-iconをHTML内に埋め込み
-・ヘッダーのMSマークを新アイコンへ変更
-・トップ画面にもブランドアイコンを表示
-・配色をダークネイビー＋シアン/ティール系へ調整
-・47ページのマニュアル画像は従来どおりindex.html内蔵
+- v2.3をベースにCamera Movementカテゴリを追加
+- StudioBinder動画の章立て15項目を日本語化
+- 実写用語と日本アニメ撮影用語の対応を併記
+- 15項目すべてにオリジナル内蔵GIF図解を追加（外部通信不要）
+- 既存機能・既存オンラインGIF作例を維持
 
-GitHub Pagesでは index.html 1ファイルだけでもアプリ本体は動作します。
-※iOSの「ホーム画面に追加」で独自アイコンが反映される挙動はSafari/iOSのバージョンにより差があります。確実に固定したい場合は同梱の apple-touch-icon.png をリポジトリ直下に置き、HTMLのlinkを外部ファイル参照にする方法が最も安定です。
+GitHub Pagesでは、このフォルダ内容をそのままリポジトリ直下へ配置してください。
