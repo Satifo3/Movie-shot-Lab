@@ -1,5 +1,3 @@
-Movie shot Lab v2.5.1 Lightweight
-- Camera Movement 15種の実写GIFをindex.htmlから分離し、camera_gifs/へ外部化
-- GIF解像度は400x225のまま維持
-- GIFはフレーム差分最適化済み
-- GitHub Pagesではフォルダ構成を崩さずアップロードしてください
+Movie shot Lab v2.5.2 Single HTML
+Camera Movement 15 GIFs are embedded directly in index.html as Base64 data URIs.
+GIF dimensions remain 400x225. Frame rate/colors were optimized to reduce size while keeping resolution unchanged.
